@@ -26,6 +26,22 @@ export default function Auth() {
     }
   }
 
+  const continueAsGuest = () => {
+    try {
+      const guest = {
+        user_id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+        name: 'Guest',
+        email: 'guest@demo.local',
+        token: 'guest'
+      }
+      setSession(guest)
+      window.dispatchEvent(new Event('session-change'))
+    } catch (e) {
+      console.error(e)
+      alert('Unable to start guest session')
+    }
+  }
+
   return (
     <section id="auth" className="py-12">
       <div className="container mx-auto px-6 md:px-12">
@@ -57,6 +73,16 @@ export default function Auth() {
               {loading ? 'Please wait…' : (mode === 'signup' ? 'Create account' : 'Sign in')}
             </button>
           </form>
+
+          <div className="mt-6">
+            <div className="relative flex items-center justify-center">
+              <span className="h-px w-full bg-slate-200" />
+              <span className="absolute bg-white px-3 text-xs text-slate-500">or</span>
+            </div>
+            <button onClick={continueAsGuest} className="mt-4 w-full inline-flex justify-center items-center px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">
+              Continue as guest
+            </button>
+          </div>
         </div>
       </div>
     </section>
